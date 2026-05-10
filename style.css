@@ -1,0 +1,152 @@
+/* === GLOBAL === */
+body {
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+  font-family: "Space Mono", monospace;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* === HEADER === */
+.tdc-header {
+  padding: 20px 30px;
+  border-bottom: 1px solid #ddd;
+  background: #fff;
+}
+
+.tdc-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.tdc-header h2 {
+  margin: 5px 0 0;
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* === MAIN LAYOUT === */
+.tdc-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  height: calc(100vh - 100px);
+  box-sizing: border-box;
+}
+
+/* === INPUT PANEL === */
+.tdc-input-panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tdc-input-panel h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+textarea {
+  width: 100%;
+  height: 200px;
+  resize: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fdfdfd;
+}
+
+#processBtn {
+  margin-top: 15px;
+  padding: 12px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#processBtn:hover {
+  background: #333;
+}
+#newRoundBtn {
+  margin-top: 10px;
+  padding: 10px;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#newRoundBtn:hover {
+  background: #ddd;
+}
+
+/* === PROCESS PANEL === */
+.tdc-process {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.tdc-process h3 {
+  margin-top: 0;
+}
+
+.tdc-step {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.tdc-step h4 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.tdc-output {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* === GAME STORY === */
+.tdc-history {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.tdc-history h3 {
+  margin-top: 0;
+}
+
+#historyList {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+#historyList div {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}

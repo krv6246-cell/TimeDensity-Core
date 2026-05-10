@@ -1,35 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Time Density</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Density OS — Ядро Крупье</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header class="td-header">
-    <div class="td-container">
-        <div class="td-logo">TIME DENSITY</div>
+  <!-- HEADER -->
+  <header class="tdc-header">
+    <h1>Time Density OS</h1>
+    <h2>Ядро Крупье — Операционная модель сознательного выбора</h2>
+  </header>
 
-        <nav class="td-nav">
-            <a href="stop-checks.html" class="td-nav-item">Stop Checks</a>
-            <a href="practices.html" class="td-nav-item">Practices</a>
-            <a href="notes.html" class="td-nav-item">Notes</a>
-            <a href="visuals.html" class="td-nav-item">Visuals</a>
-        </nav>
-    </div>
-</header>
+  <!-- MAIN LAYOUT -->
+  <main class="tdc-layout">
+
+    <!-- LEFT: INPUT PANEL -->
+    <section class="tdc-input-panel">
+  <h3>Ввод</h3>
+  <textarea id="userInput" placeholder="Введите вопрос, ситуацию или задачу..."></textarea>
+  <button id="processBtn">Запустить Крупье</button>
+  <button id="newRoundBtn" class="secondary-btn">Новый раунд</button>
+</section>
 
 
-    <main class="td-main">
-        <h1 class="td-title">Clarity. Rhythm. Density of Time.</h1>
-        <p class="td-subtitle">Minimal space for maximal presence.</p>
-    </main>
+    <!-- CENTER: PROCESS VISUALIZATION -->
+    <section class="tdc-process">
+      <h3>Процесс</h3>
 
-    <footer class="td-footer">
-        <span>© Time Density</span>
-    </footer>
+      <div class="tdc-step" id="step-parse">
+        <h4>Parse (Утюг Перельмана)</h4>
+        <p class="tdc-output"></p>
+      </div>
 
+      <div class="tdc-step" id="step-modeselect">
+        <h4>ModeSelect (Выбор режима)</h4>
+        <p class="tdc-output"></p>
+      </div>
+
+      <div class="tdc-step" id="step-process">
+        <h4>Process (Пилот / Исследователь)</h4>
+        <p class="tdc-output"></p>
+      </div>
+
+      <div class="tdc-step" id="step-balance">
+        <h4>Balance (Возврат в 0)</h4>
+        <p class="tdc-output"></p>
+      </div>
+
+      <div class="tdc-step" id="step-output">
+        <h4>Output (Ответ Крупье)</h4>
+        <p class="tdc-output"></p>
+      </div>
+
+      <div class="tdc-step" id="step-density">
+        <h4>UpdateDensity (ρ)</h4>
+        <p class="tdc-output"></p>
+      </div>
+    </section>
+
+    <!-- RIGHT: GAME STORY -->
+    <section class="tdc-history">
+      <h3>Game Story</h3>
+      <div id="historyList"></div>
+    </section>
+
+  </main>
+
+  <script type="module" src="main.js"></script>
 </body>
 </html>
