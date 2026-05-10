@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Density • ИГРА</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #0a0a0a; color: #0f0; font-family: monospace; }
+        .kernel { max-width: 900px; margin: 40px auto; padding: 20px; border: 2px solid #0f0; }
+        .density-meter { height: 30px; background: linear-gradient(to right, #00ff00, #ffff00, #ff0000); margin: 15px 0; position: relative; }
+        .density-value { position: absolute; top: -25px; font-weight: bold; }
+        button { background: #000; color: #0f0; border: 1px solid #0f0; padding: 12px 24px; margin: 8px; cursor: pointer; }
+        button:hover { background: #0f0; color: #000; }
+        .log { height: 300px; overflow-y: auto; background: #111; padding: 10px; font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="kernel">
+    <h1>█ ЯДРО КРУПЬЕ • TIME DENSITY GAME █</h1>
+    <p><strong>Точка 0 активирована.</strong> Сделай выбор → наблюдай сжатие ρₜ</p>
+
+    <div>
+        <label>Введи интенсивность (1–100):</label>
+        <input type="number" id="intensity" value="42" min="1" max="100">
+    </div>
+
+    <button onclick="playRound()">▶ СЖАТЬ ВРЕМЯ (Сделать выбор)</button>
+    <button onclick="resetGame()">⟳ Сброс в горизонталь 0</button>
+
+    <div class="density-meter">
+        <div id="densityBar" style="width: 50%; height: 100%; background: #0f0;"></div>
+        <div id="densityValue" class="density-value">ρₜ = 0.50</div>
+    </div>
+
+    <div class="log" id="log"></div>
+
+    <h2>Ось −1 → 0 → +1</h2>
+    <div id="axis" style="text-align:center; font-size:28px; margin:20px;">−1 ——— <span style="color:#0f0;">0</span> ——— +1</div>
+</div>
+
+<script src="main.js"></script>
+<script>
+function log(msg) {
+    const logEl = document.getElementById('log');
+    logEl.innerHTML += `<div>> ${msg}</div>`;
+    logEl.scrollTop = logEl.scrollHeight;
+}
+
+function updateDensity(d) {
+    document.getElementById('densityBar').style.width = (d * 100) + '%';
+    document.getElementById('densityValue').textContent = `ρₜ = ${d.toFixed(2)}`;
+}
+
+function playRound() {
+    const intensity = parseInt(document.getElementById('intensity').value) || 42;
+    const rho = Math.min(0.95, intensity / 100 + Math.random() * 0.2 - 0.1);
+
+    log(`Выбор в Точке 0: интенсивность = ${intensity}`);
+    log(`Сжатие... ρₜ растёт → ${rho.toFixed(2)}`);
+    
+    updateDensity(rho);
+
+    setTimeout(() => {
+        const outcome = rho > 0.7 ? "Структура удержана (высокая плотность)" : 
+                       rho > 0.4 ? "Коридор пройден" : "Разрежение • шум";
+        log(`Исход: ${outcome}`);
+        log(`Опыт получен. Вариативность ↑`);
+    }, 800);
+}
+
+function resetGame() {
+    updateDensity(0.5);
+    document.getElementById('log').innerHTML = '';
+    log('Возвращение в горизонталь нулевой интерпретации...');
+    log('Точка 0 очищена.');
+}
+</script>
+</body>
+</html>
