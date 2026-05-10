@@ -1,11 +1,5 @@
 # TimeDensity-Core
 
-Unified Time Density Ontological System
+Unified Time Density Ontological System v1.0
 
-Сознание → Потенциал → 0 → Исход → Опыт → Вариативность → Уровень/Качество
-
-## Структура
-- `core/` - Ядро (казино-ядро + engine)
-- `site/` - Фронтенд и визуализации
-- `faq/` - Документация
-- `docs/` - Полная онтология
+Сжато в единую систему.
