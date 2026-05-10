@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TimeDensity FAQ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo">TimeDensity</div>
+        <div class="lang-switch">
+            <button id="btnLangRu" class="active" onclick="setLang('ru')">RU</button>
+            <button id="btnLangEn" onclick="setLang('en')">EN</button>
+        </div> <!-- закрыли lang-switch -->
+    </header>
+
+<div style="text-align: center; margin: 1.2rem 0 2.5rem;">
+    <a href="home.html"
+       class="donate-btn"
+       style="font-size: 1.05rem; padding: 0.85rem 2.2rem; letter-spacing: 0.6px;">
+        На главную TimeDensity
+    </a>
+</div>
+
+
+    <h1>TimeDensity / TimeMechanics FAQ</h1>
+    <div class="subtitle">Многоуровневая структура вопросов и ответов о плотности времени</div>
+
+    <div id="app">
+        <h2 class="section-title">Уровни</h2>
+        <div id="levelList"></div>
+
+        <div id="questionsSection" style="display:none;">
+            <h2 class="section-title">Вопросы уровня</h2>
+            <div class="breadcrumbs">Уровень: <span id="currentLevelName"></span></div>
+            <div id="questionList"></div>
+            <button class="back-btn" onclick="backToLevels()">← Назад к уровням</button>
+        </div>
+
+        <div id="answerSection" style="display:none;">
+            <h2 class="section-title">Ответ</h2>
+            <div class="breadcrumbs">
+                Уровень: <span id="answerLevelName"></span> · Вопрос: <span id="answerQuestionText"></span>
+            </div>
+            <div class="answer-box" id="answerBox"></div>
+            <button class="back-btn" onclick="backToQuestions()">← Назад к вопросам</button>
+        </div>
+    </div>
+
+    <div class="donate-wrapper">
+        <a href="#" class="donate-btn">DONATE</a>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

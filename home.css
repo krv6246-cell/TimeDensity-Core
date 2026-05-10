@@ -1,0 +1,54 @@
+/* ===== HEADER ===== */
+
+.td-header {
+    width: 100%;
+    background: #8258b9; /* твой фиолетовый фон */
+    padding: 1.2rem 0;
+}
+
+/* Навигация */
+.td-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Логотип */
+.td-logo-img {
+    height: 70px;
+    width: auto;
+}
+
+/* Заголовок */
+.td-title {
+    font-size: 1.8rem;
+    margin: 0 1rem;
+    color: #1b1b1b;
+    font-weight: 700;
+}
+
+/* Контейнер кнопок справа */
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Кнопки */
+.header-button {
+    background: #ffd84d;
+    padding: 0.55rem 1.1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #1b1b1b;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.header-button:hover {
+    background: #ffcc33;
+}
+
