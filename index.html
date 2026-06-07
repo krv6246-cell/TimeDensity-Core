@@ -19,7 +19,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-ser
 
 /* ─── LANG SWITCHER ─── */
 .lang-switcher {
-  position: fixed; top: 16px; right: 120px; z-index: 200;
   display: flex; background: var(--surface2);
   border: 1px solid var(--border); border-radius: 20px; overflow: hidden;
 }
@@ -380,7 +379,7 @@ footer a { color: var(--accent); text-decoration: none; }
 @media (max-width: 768px) {
   nav { padding: 0 16px; }
   .nav-links { display: none; }
-  .lang-switcher { right: 80px; }
+  /* lang-switcher inside nav */
   .operator-inner { flex-direction: column; }
   .operator-img-wrap { flex: none; width: 100%; max-width: 360px; margin: 0 auto; }
   .timeos-inner { flex-direction: column; align-items: center; }
@@ -404,12 +403,6 @@ div[data-ru], section[data-ru] { display: none; }
 </head>
 <body>
 
-<!-- LANG SWITCHER -->
-<div class="lang-switcher">
-  <button class="lang-btn active" onclick="setLang('en')">EN</button>
-  <button class="lang-btn" onclick="setLang('ru')">RU</button>
-</div>
-
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">
@@ -423,6 +416,10 @@ div[data-ru], section[data-ru] { display: none; }
     <a href="#trc">TRC</a>
     <a href="#croupier"><span data-en>Croupier</span><span data-ru>Крупье</span></a>
     <a href="#philosophy"><span data-en>Philosophy</span><span data-ru>Философия</span></a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('ru')">RU</button>
   </div>
   <a class="nav-cta" href="#croupier">ENTER Ø</a>
 </nav>
