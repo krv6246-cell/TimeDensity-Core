@@ -1,75 +1,919 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Time Density OS — Ядро Крупье</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Density — Live in Your Own Time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
+:root {
+  --bg: #07070f;
+  --surface: #0e0e1c;
+  --surface2: #141426;
+  --border: #1e1e35;
+  --accent: #c8a96e;
+  --accent2: #7eb8c8;
+  --accent3: #9b8ec8;
+  --text: #e8e8f0;
+  --text2: #6666aa;
+  --text3: #444466;
+  --green: #6ec87e;
+  --purple: #c86ec8;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(7,7,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 64px;
+}
+.nav-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 15px;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  color: var(--text2); font-size: 13px; text-decoration: none;
+  letter-spacing: 1px; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  background: var(--accent); color: #07070f;
+  padding: 8px 20px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  text-decoration: none; transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 20px 60px;
+  position: relative; overflow: hidden;
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(200,169,110,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,169,110,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+}
+
+.hero-symbol {
+  font-family: 'Space Mono', monospace;
+  font-size: 80px;
+  color: var(--accent);
+  opacity: 0.15;
+  position: absolute;
+  top: 20%; left: 50%; transform: translateX(-50%);
+  pointer-events: none;
+  animation: pulse 4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.1} 50%{opacity:0.2} }
+
+.hero-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; letter-spacing: 6px;
+  color: var(--accent); opacity: 0.7;
+  margin-bottom: 24px; position: relative;
+}
+
+.hero-title {
+  font-size: clamp(40px, 8vw, 80px);
+  font-weight: 700; line-height: 1.05;
+  letter-spacing: -2px;
+  position: relative; margin-bottom: 24px;
+}
+
+.hero-title .line2 { color: var(--accent); }
+
+.hero-sub {
+  font-size: 17px; color: var(--text2);
+  line-height: 1.7; max-width: 520px;
+  margin: 0 auto 40px; position: relative;
+}
+
+.hero-btns {
+  display: flex; gap: 16px; justify-content: center;
+  flex-wrap: wrap; position: relative;
+}
+
+.btn-primary {
+  background: var(--accent); color: #07070f;
+  padding: 14px 32px; border-radius: 30px;
+  font-weight: 700; font-size: 13px; letter-spacing: 2px;
+  text-decoration: none; transition: all 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,169,110,0.3); }
+
+.btn-secondary {
+  background: transparent; color: var(--text);
+  padding: 14px 32px; border-radius: 30px;
+  font-size: 13px; letter-spacing: 2px;
+  border: 1px solid var(--border); text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ─── LIVE COUNTER ─── */
+.live-strip {
+  display: flex; gap: 40px; justify-content: center;
+  flex-wrap: wrap; margin-top: 60px; position: relative;
+}
+.live-item { text-align: center; }
+.live-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 28px; color: var(--accent); letter-spacing: 2px;
+}
+.live-label { font-size: 11px; color: var(--text3); letter-spacing: 3px; margin-top: 4px; }
+
+/* ─── SECTIONS ─── */
+section { padding: 100px 20px; max-width: 1100px; margin: 0 auto; }
+
+.section-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 5px; color: var(--accent);
+  opacity: 0.6; margin-bottom: 16px; text-transform: uppercase;
+}
+.section-title {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700; letter-spacing: -1px;
+  margin-bottom: 16px; line-height: 1.1;
+}
+.section-sub {
+  font-size: 15px; color: var(--text2);
+  line-height: 1.7; max-width: 560px; margin-bottom: 48px;
+}
+
+/* ─── CLOCK WIDGET ─── */
+#clock-section {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 100px 20px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(200,169,110,0.04) 0%, transparent 70%);
+}
+
+.clocks-row {
+  display: flex; gap: 60px; align-items: center;
+  flex-wrap: wrap; justify-content: center;
+  margin-top: 48px;
+}
+
+.clock-block { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+.clock-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 4px; color: var(--text3);
+}
+
+.clock-time {
+  font-family: 'Space Mono', monospace;
+  font-size: 24px; letter-spacing: 3px; font-weight: 400;
+}
+.clock-time.real { color: var(--text2); }
+.clock-time.td   { color: var(--accent); }
+
+.clock-divider {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.clock-div-line { width: 1px; height: 50px; background: var(--border); }
+.clock-div-sym {
+  font-family: 'Space Mono', monospace;
+  font-size: 24px; color: var(--text3);
+}
+
+.saved-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px 32px; text-align: center;
+}
+.saved-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 36px; color: var(--accent2); letter-spacing: 2px;
+}
+.saved-lbl { font-size: 11px; color: var(--text3); letter-spacing: 3px; margin-top: 4px; }
+
+/* ─── PARADIGM CARDS ─── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.paradigm-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.paradigm-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+.card-icon {
+  font-family: 'Space Mono', monospace;
+  font-size: 28px; margin-bottom: 16px;
+}
+.card-icon.gold   { color: var(--accent); }
+.card-icon.blue   { color: var(--accent2); }
+.card-icon.purple { color: var(--accent3); }
+.card-icon.green  { color: var(--green); }
+
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.card-text  { font-size: 14px; color: var(--text2); line-height: 1.7; }
+
+/* ─── TRC SECTION ─── */
+#trc {
+  border-top: 1px solid var(--border);
+  padding: 100px 20px;
+}
+.trc-inner { max-width: 1100px; margin: 0 auto; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px; margin-top: 40px;
+}
+
+.kpi-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.kpi-card:hover { border-color: var(--accent); }
+
+.kpi-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 22px; color: var(--accent);
+  margin-bottom: 8px;
+}
+.kpi-full { font-size: 12px; color: var(--text2); letter-spacing: 1px; margin-bottom: 12px; }
+.kpi-desc { font-size: 13px; color: var(--text3); line-height: 1.6; }
+
+/* ─── CROUPIER ─── */
+#croupier {
+  border-top: 1px solid var(--border);
+  padding: 100px 20px;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(155,142,200,0.05) 0%, transparent 70%);
+}
+.croupier-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+
+.croupier-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px; padding: 32px;
+  margin-top: 40px; text-align: left;
+}
+
+.croupier-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px;
+}
+.croupier-lbl {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 4px; color: var(--text3);
+}
+
+.mode-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  padding: 4px 12px; border-radius: 20px;
+  transition: all 0.4s;
+}
+.mode-center  { background: rgba(200,169,110,0.1); color: var(--accent);  border: 1px solid rgba(200,169,110,0.3); }
+.mode-pilot   { background: rgba(110,200,126,0.1); color: var(--green);   border: 1px solid rgba(110,200,126,0.3); }
+.mode-explorer{ background: rgba(200,110,200,0.1); color: var(--purple);  border: 1px solid rgba(200,110,200,0.3); }
+
+.croupier-out {
+  font-size: 14px; color: var(--text2); line-height: 1.8;
+  min-height: 60px; margin-bottom: 20px;
+  transition: opacity 0.3s;
+}
+
+.density-row { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.density-track {
+  flex: 1; height: 4px; background: var(--surface2);
+  border-radius: 2px; position: relative; overflow: hidden;
+}
+.density-fill {
+  height: 100%; border-radius: 2px;
+  transition: width 0.5s ease, background 0.5s ease;
+  background: var(--accent);
+}
+.density-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px; color: var(--accent); min-width: 36px;
+}
+
+.axis-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.axis-lbl { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text3); }
+.axis-track { flex: 1; height: 2px; background: var(--surface2); border-radius: 1px; position: relative; }
+.axis-dot {
+  position: absolute; width: 10px; height: 10px;
+  border-radius: 50%; background: var(--accent);
+  top: -4px; transition: left 0.5s ease;
+  box-shadow: 0 0 10px rgba(200,169,110,0.5);
+}
+
+.input-row { display: flex; gap: 10px; }
+.croupier-input {
+  flex: 1; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 16px; color: var(--text);
+  font-family: 'Inter', sans-serif; font-size: 14px;
+  outline: none; transition: border-color 0.3s;
+}
+.croupier-input:focus { border-color: var(--accent); }
+.croupier-btn {
+  background: var(--accent); color: var(--bg);
+  border: none; border-radius: 12px;
+  padding: 12px 20px; font-family: 'Space Mono', monospace;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: opacity 0.2s;
+}
+.croupier-btn:hover { opacity: 0.85; }
+
+/* ─── PHILOSOPHY ─── */
+#philosophy {
+  border-top: 1px solid var(--border);
+  padding: 100px 20px;
+}
+.philosophy-inner { max-width: 1100px; margin: 0 auto; }
+
+.thesis-list { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; }
+
+.thesis {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 16px; padding: 24px 28px;
+  display: flex; gap: 20px; align-items: flex-start;
+  transition: border-color 0.3s;
+}
+.thesis:hover { border-color: var(--accent); }
+.thesis-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; color: var(--accent);
+  opacity: 0.5; min-width: 28px; margin-top: 2px;
+}
+.thesis-text { font-size: 15px; color: var(--text2); line-height: 1.7; }
+.thesis-text strong { color: var(--text); }
+
+/* ─── TIMEOS EMBED ─── */
+#timeos {
+  border-top: 1px solid var(--border);
+  padding: 100px 20px;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(126,184,200,0.04) 0%, transparent 70%);
+}
+.timeos-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 60px; align-items: center; flex-wrap: wrap; }
+.timeos-text { flex: 1; min-width: 280px; }
+.timeos-preview {
+  flex: 1; min-width: 300px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px; overflow: hidden;
+  aspect-ratio: 9/16; max-width: 340px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative;
+}
+.timeos-preview-inner {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px; padding: 32px;
+}
+.timeos-big-time {
+  font-family: 'Space Mono', monospace;
+  font-size: 42px; color: var(--accent2); letter-spacing: 2px;
+}
+.timeos-big-label { font-size: 11px; color: var(--text3); letter-spacing: 3px; }
+
+.timeos-ring {
+  width: 160px; height: 160px; position: relative;
+  margin: 8px 0;
+}
+.timeos-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.timeos-ring-lbl {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.timeos-ring-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 28px; color: var(--text);
+}
+.timeos-ring-sub { font-size: 10px; color: var(--text3); letter-spacing: 2px; }
+
+.timeos-open-btn {
+  background: var(--accent2); color: var(--bg);
+  padding: 14px 32px; border-radius: 30px;
+  font-weight: 700; font-size: 13px; letter-spacing: 2px;
+  text-decoration: none; transition: all 0.2s;
+  display: inline-block; margin-top: 24px;
+}
+.timeos-open-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(126,184,200,0.3); }
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px; text-align: center;
+  color: var(--text3); font-size: 12px; letter-spacing: 2px;
+}
+footer a { color: var(--accent); text-decoration: none; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .clocks-row { gap: 30px; }
+  .timeos-inner { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
 <body>
 
-  <!-- HEADER -->
-  <header class="tdc-header">
-    <h1>Time Density OS</h1>
-    <h2>Ядро Крупье — Операционная модель сознательного выбора</h2>
-  </header>
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">TD · Ø</a>
+  <div class="nav-links">
+    <a href="#clock-section">Clock</a>
+    <a href="#paradigm">Paradigm</a>
+    <a href="#trc">TRC</a>
+    <a href="#croupier">Croupier</a>
+    <a href="#philosophy">Philosophy</a>
+    <a href="#timeos">Time OS</a>
+  </div>
+  <a class="nav-cta" href="#croupier">ENTER Ø</a>
+</nav>
 
-  <!-- MAIN LAYOUT -->
-  <main class="tdc-layout">
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-symbol">Ø</div>
+  <div class="hero-tag">TIME DENSITY PARADIGM</div>
+  <h1 class="hero-title">
+    Live in<br><span class="line2">Your Own Time.</span>
+  </h1>
+  <p class="hero-sub">
+    Time is not a river you float on. It is a field you compress. 
+    The density of your time determines the density of your life.
+  </p>
+  <div class="hero-btns">
+    <a class="btn-primary" href="#croupier">Launch Croupier Ø</a>
+    <a class="btn-secondary" href="#paradigm">Explore Paradigm</a>
+  </div>
 
-    <!-- LEFT: INPUT PANEL -->
-    <section class="tdc-input-panel">
-  <h3>Ввод</h3>
-  <textarea id="userInput" placeholder="Введите вопрос, ситуацию или задачу..."></textarea>
-  <button id="processBtn">Запустить Крупье</button>
-  <button id="newRoundBtn" class="secondary-btn">Новый раунд</button>
+  <div class="live-strip">
+    <div class="live-item">
+      <div class="live-value" id="heroSaved">00:00:00</div>
+      <div class="live-label">TIME SAVED TODAY</div>
+    </div>
+    <div class="live-item">
+      <div class="live-value" id="heroDensity">1.00</div>
+      <div class="live-label">DENSITY ρ(x)</div>
+    </div>
+    <div class="live-item">
+      <div class="live-value" id="heroTD">00:00</div>
+      <div class="live-label">TD TIME NOW</div>
+    </div>
+  </div>
+</div>
+
+<!-- CLOCK SECTION -->
+<div id="clock-section">
+  <div class="section-tag">DUAL CLOCK ENGINE</div>
+  <h2 class="section-title">Two Times. One Reality.</h2>
+  <p class="section-sub" style="margin:0 auto 0; text-align:center;">
+    The TD Clock runs on 20 hours and 45-second minutes. 
+    Watch your time density compound in real time.
+  </p>
+
+  <div class="clocks-row">
+    <div class="clock-block">
+      <div class="clock-label">LINEAR TIME · 24H</div>
+      <canvas id="realCanvas" width="200" height="200"></canvas>
+      <div class="clock-time real" id="realTime">00:00:00</div>
+    </div>
+
+    <div class="clock-divider">
+      <div class="clock-div-line"></div>
+      <div class="clock-div-sym">Ø</div>
+      <div class="saved-card">
+        <div class="saved-val" id="savedTime">00:00:00</div>
+        <div class="saved-lbl">HOURS RECLAIMED</div>
+      </div>
+      <div class="clock-div-line"></div>
+    </div>
+
+    <div class="clock-block">
+      <div class="clock-label">TD TIME · 20H · 45S/MIN</div>
+      <canvas id="tdCanvas" width="200" height="200"></canvas>
+      <div class="clock-time td" id="tdTime">00:00:00</div>
+    </div>
+  </div>
+</div>
+
+<!-- PARADIGM -->
+<section id="paradigm">
+  <div class="section-tag">CORE PARADIGM</div>
+  <h2 class="section-title">Time is a Field,<br>Not a Flow.</h2>
+  <p class="section-sub">
+    Time Density reframes how we understand time — not as an external river 
+    but as a personal field that can be compressed, expanded, or wasted.
+  </p>
+  <div class="cards-grid">
+    <div class="paradigm-card">
+      <div class="card-icon gold">−1</div>
+      <div class="card-title">Wave State</div>
+      <div class="card-text">Pure potential. Non-linear time. The field before observation collapses it into a single path. This is where creativity, intuition and deep thinking live.</div>
+    </div>
+    <div class="paradigm-card">
+      <div class="card-icon blue">0</div>
+      <div class="card-title">Point Zero</div>
+      <div class="card-text">Maximum density. The moment of conscious choice. ρ(x) = 1. Neither wave nor particle — the threshold between potential and action.</div>
+    </div>
+    <div class="paradigm-card">
+      <div class="card-icon green">+1</div>
+      <div class="card-title">Particle State</div>
+      <div class="card-text">Action. Linear time. The wave collapses into a single definite outcome. Execution, delivery, concrete results — time compressed into value.</div>
+    </div>
+    <div class="paradigm-card">
+      <div class="card-icon purple">ρ(x)</div>
+      <div class="card-title">Density Formula</div>
+      <div class="card-text">ρ(x) = 1 − |x|. Density peaks at zero and diminishes toward extremes. The art of living is maintaining proximity to Point 0.</div>
+    </div>
+  </div>
 </section>
 
+<!-- TRC -->
+<div id="trc">
+  <div class="trc-inner">
+    <div class="section-tag">TIME-RESULT CONTRACT</div>
+    <h2 class="section-title">Pay for Results.<br>Not Hours.</h2>
+    <p class="section-sub">
+      The TRC model redefines employment by treating time as a second currency. 
+      When you finish in 4 hours what took 8 — the 4 saved are yours.
+    </p>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-name">ODI</div>
+        <div class="kpi-full">Output Density Index</div>
+        <div class="kpi-desc">Measures the ratio of actual output to contracted time window. The core KPI of time efficiency.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">CRR</div>
+        <div class="kpi-full">Contract Result Rate</div>
+        <div class="kpi-desc">Tracks the percentage of contracts completed within the agreed time-result parameters.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-name">TRR</div>
+        <div class="kpi-full">Time Reward Rate</div>
+        <div class="kpi-desc">The ratio of time returned to the worker as a reward for early high-quality completion.</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <!-- CENTER: PROCESS VISUALIZATION -->
-    <section class="tdc-process">
-      <h3>Процесс</h3>
+<!-- CROUPIER -->
+<div id="croupier">
+  <div class="croupier-inner">
+    <div class="section-tag">CROUPIER ALGORITHM · TD-AI-02</div>
+    <h2 class="section-title">The Balance Engine.</h2>
+    <p class="section-sub" style="margin:0 auto;">
+      Enter your intention. The Croupier detects your current state — 
+      Pilot (+1), Explorer (−1), or Center (0) — and responds accordingly.
+    </p>
 
-      <div class="tdc-step" id="step-parse">
-        <h4>Parse (Утюг Перельмана)</h4>
-        <p class="tdc-output"></p>
+    <div class="croupier-panel">
+      <div class="croupier-top">
+        <div class="croupier-lbl">CROUPIER · ACTIVE</div>
+        <div class="mode-badge mode-center" id="modeBadge">CENTER · 0</div>
       </div>
 
-      <div class="tdc-step" id="step-modeselect">
-        <h4>ModeSelect (Выбор режима)</h4>
-        <p class="tdc-output"></p>
+      <div class="croupier-out" id="croupierOut">
+        Enter your intention below. The Croupier holds the balance between action (+1) and possibility (−1). ρ(x) = 1 − |x|
       </div>
 
-      <div class="tdc-step" id="step-process">
-        <h4>Process (Пилот / Исследователь)</h4>
-        <p class="tdc-output"></p>
+      <div class="density-row">
+        <div class="croupier-lbl" style="min-width:60px;">ρ(x)</div>
+        <div class="density-track">
+          <div class="density-fill" id="densityFill" style="width:50%"></div>
+        </div>
+        <div class="density-num" id="densityNum">1.00</div>
       </div>
 
-      <div class="tdc-step" id="step-balance">
-        <h4>Balance (Возврат в 0)</h4>
-        <p class="tdc-output"></p>
+      <div class="axis-row">
+        <div class="axis-lbl">−1</div>
+        <div class="axis-track">
+          <div class="axis-dot" id="axisDot" style="left:calc(50% - 5px)"></div>
+        </div>
+        <div class="axis-lbl">+1</div>
       </div>
 
-      <div class="tdc-step" id="step-output">
-        <h4>Output (Ответ Крупье)</h4>
-        <p class="tdc-output"></p>
+      <div class="input-row">
+        <input class="croupier-input" id="croupierInput" type="text" placeholder="Your intention / Ваша интенция..." />
+        <button class="croupier-btn" onclick="runCroupier()">Ø</button>
       </div>
+    </div>
+  </div>
+</div>
 
-      <div class="tdc-step" id="step-density">
-        <h4>UpdateDensity (ρ)</h4>
-        <p class="tdc-output"></p>
+<!-- PHILOSOPHY -->
+<div id="philosophy">
+  <div class="philosophy-inner">
+    <div class="section-tag">PHILOSOPHICAL THESES</div>
+    <h2 class="section-title">Core Principles.</h2>
+    <p class="section-sub">
+      The foundational theses of the Time Density paradigm — each concludes with a daily practice.
+    </p>
+    <div class="thesis-list">
+      <div class="thesis">
+        <div class="thesis-num">01</div>
+        <div class="thesis-text"><strong>Systems with a deep philosophical core are always more stable than systems without one.</strong> The depth of the −1 determines the resilience of the +1. Practice: identify your own core — the non-negotiable values that remain constant under any external pressure.</div>
       </div>
-    </section>
+      <div class="thesis">
+        <div class="thesis-num">02</div>
+        <div class="thesis-text"><strong>Attention is the mechanism that collapses time from wave to particle.</strong> Every act of focused attention compresses time density. Scattered attention expands it toward zero. Practice: choose one thing per 45-minute cycle. Only one.</div>
+      </div>
+      <div class="thesis">
+        <div class="thesis-num">03</div>
+        <div class="thesis-text"><strong>Time saved is not time idle — it is time returned to potential (−1).</strong> The 9 hours recovered daily by the TD clock are not empty — they are the raw material of depth. Practice: schedule one daily block of unstructured time. No agenda. Full potential.</div>
+      </div>
+      <div class="thesis">
+        <div class="thesis-num">04</div>
+        <div class="thesis-text"><strong>Leadership is the ability to establish a temporal field that synchronizes a team's trajectory.</strong> A leader with high internal density creates a gravitational pull toward Point 0 for everyone around them. Practice: before any meeting, spend 3 minutes compressing your own state to Point 0.</div>
+      </div>
+      <div class="thesis">
+        <div class="thesis-num">05</div>
+        <div class="thesis-text"><strong>An artificial collective core that does not resonate with an organic philosophical tradition will collapse under pressure.</strong> Stability requires depth, not just structure. Practice: distinguish between rules you follow and values you embody. The second set is your real core.</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <!-- RIGHT: GAME STORY -->
-    <section class="tdc-history">
-      <h3>Game Story</h3>
-      <div id="historyList"></div>
-    </section>
+<!-- TIME OS -->
+<div id="timeos">
+  <div class="timeos-inner">
+    <div class="timeos-text">
+      <div class="section-tag">TIME OS APP</div>
+      <h2 class="section-title">Your Density.<br>Operational.</h2>
+      <p class="section-sub">
+        Time OS is the live implementation of TD principles. 
+        45-minute focus cycles. 10-minute resets. Your density tracked in real time.
+      </p>
+      <p style="font-size:14px; color:var(--text2); line-height:1.7; margin-bottom:8px;">
+        Built on the 20-hour day model — 54,000 seconds of pure density. 
+        The app runs in your browser, no install needed.
+      </p>
+      <a class="timeos-open-btn" href="https://krv6246-cell.github.io/timeos/" target="_blank">
+        OPEN TIME OS →
+      </a>
+    </div>
+    <div class="timeos-preview">
+      <div class="timeos-preview-inner">
+        <div class="timeos-big-label">TD TIME NOW</div>
+        <div class="timeos-big-time" id="previewTD">00:00</div>
+        <div class="timeos-ring">
+          <svg viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="68" fill="none" stroke="#1e1e35" stroke-width="8"/>
+            <circle cx="80" cy="80" r="68" fill="none" stroke="#7eb8c8" stroke-width="8"
+              stroke-dasharray="427" stroke-dashoffset="427"
+              id="timerRing" stroke-linecap="round"/>
+          </svg>
+          <div class="timeos-ring-lbl">
+            <div class="timeos-ring-val" id="timerVal">45:00</div>
+            <div class="timeos-ring-sub">FOCUS CYCLE</div>
+          </div>
+        </div>
+        <div style="font-size:11px; color:var(--text3); letter-spacing:3px;">45 MIN · 10 MIN REST</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  </main>
+<!-- FOOTER -->
+<footer>
+  <div style="margin-bottom:16px;">
+    <a href="https://substack.com/@timedensity" target="_blank">Substack</a> · 
+    <a href="https://krv6246-cell.github.io/timeos/" target="_blank">Time OS</a> · 
+    <a href="https://philarchive.org" target="_blank">PhilArchive</a>
+  </div>
+  <div>TIME DENSITY PARADIGM · ρ(x) = 1 − |x| · © 2026</div>
+</footer>
 
-  <script type="module" src="main.js"></script>
+<script>
+// ─── CLOCK ENGINE ──────────────────────────────────────────────────────────
+const TD_RATIO = 86400 / 54000;
+
+function pad(n) { return String(Math.floor(n)).padStart(2,'0'); }
+
+function getTDTime() {
+  const now = new Date();
+  const realSec = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
+  const tdSec = realSec * TD_RATIO;
+  return {
+    h: Math.floor(tdSec/3600) % 20,
+    m: Math.floor((tdSec%3600)/60),
+    s: Math.floor(tdSec%60),
+    total: tdSec,
+    realSec
+  };
+}
+
+function drawClock(id, h, m, s, maxH, color) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const W=c.width, H=c.height, cx=W/2, cy=H/2, r=W/2-10;
+  ctx.clearRect(0,0,W,H);
+
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle='#0e0e1c'; ctx.fill();
+  ctx.strokeStyle='#1e1e35'; ctx.lineWidth=1.5; ctx.stroke();
+
+  for(let i=0;i<maxH;i++){
+    const a=(i/maxH)*Math.PI*2-Math.PI/2;
+    const maj=i%(maxH===20?5:3)===0;
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(a)*(r-(maj?14:8)), cy+Math.sin(a)*(r-(maj?14:8)));
+    ctx.lineTo(cx+Math.cos(a)*(r-2), cy+Math.sin(a)*(r-2));
+    ctx.strokeStyle=maj?'#333':'#1e1e2e'; ctx.lineWidth=maj?1.5:1; ctx.stroke();
+  }
+
+  const sa=(s/60)*Math.PI*2-Math.PI/2;
+  ctx.beginPath(); ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+Math.cos(sa)*(r-8), cy+Math.sin(sa)*(r-8));
+  ctx.strokeStyle=color; ctx.lineWidth=1; ctx.stroke();
+
+  const ma=((m+s/60)/60)*Math.PI*2-Math.PI/2;
+  ctx.beginPath(); ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+Math.cos(ma)*(r-24), cy+Math.sin(ma)*(r-24));
+  ctx.strokeStyle='#aaa'; ctx.lineWidth=2; ctx.stroke();
+
+  const ha=((h+m/60)/maxH)*Math.PI*2-Math.PI/2;
+  ctx.beginPath(); ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+Math.cos(ha)*(r-44), cy+Math.sin(ha)*(r-44));
+  ctx.strokeStyle='#fff'; ctx.lineWidth=3; ctx.stroke();
+
+  ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2);
+  ctx.fillStyle=color; ctx.fill();
+}
+
+function updateClocks() {
+  const now = new Date();
+  const rH=now.getHours(), rM=now.getMinutes(), rS=now.getSeconds();
+  document.getElementById('realTime').textContent=`${pad(rH)}:${pad(rM)}:${pad(rS)}`;
+  drawClock('realCanvas', rH, rM, rS, 24, '#6666aa');
+
+  const td = getTDTime();
+  document.getElementById('tdTime').textContent=`${pad(td.h)}:${pad(td.m)}:${pad(td.s)}`;
+  document.getElementById('heroTD').textContent=`${pad(td.h)}:${pad(td.m)}`;
+  document.getElementById('previewTD').textContent=`${pad(td.h)}:${pad(td.m)}`;
+  drawClock('tdCanvas', td.h, td.m, td.s, 20, '#c8a96e');
+
+  const saved = Math.max(0, td.realSec - td.realSec/TD_RATIO);
+  const sh=Math.floor(saved/3600), sm=Math.floor((saved%3600)/60), ss=Math.floor(saved%60);
+  const savedStr=`${pad(sh)}:${pad(sm)}:${pad(ss)}`;
+  document.getElementById('savedTime').textContent=savedStr;
+  document.getElementById('heroSaved').textContent=savedStr;
+}
+
+// Timer ring preview (fake 45-min cycle)
+let timerSec = 45*60;
+function updateTimerRing() {
+  timerSec--;
+  if(timerSec<0) timerSec=45*60;
+  const pct = timerSec/(45*60);
+  const circ = 427;
+  document.getElementById('timerRing').style.strokeDashoffset = circ*(1-pct);
+  const m=Math.floor(timerSec/60), s=timerSec%60;
+  document.getElementById('timerVal').textContent=`${pad(m)}:${pad(s)}`;
+}
+
+updateClocks();
+setInterval(updateClocks, 1000);
+setInterval(updateTimerRing, 1000);
+
+// ─── CROUPIER ──────────────────────────────────────────────────────────────
+const kw = {
+  en: {
+    pilot:    ['create','implement','build','execute','action','fact','concrete','real','do','make','achieve','accomplish','complete','deliver','produce','start','finish','launch','ship'],
+    explorer: ['explore','discover','hypothesis','possibility','wonder','imagine','consider','think','maybe','perhaps','could','might','potential','investigate','question','suppose','concept','theory','idea']
+  },
+  ru: {
+    pilot:    ['создать','реализовать','построить','выполнить','действие','факт','конкретный','реальный','делать','делай','достичь','завершить','запустить','начать','сделать'],
+    explorer: ['исследовать','открыть','гипотеза','возможность','интересно','представить','рассмотреть','думать','может','возможно','потенциал','изучать','вопрос','предположим','концепция','теория','идея']
+  }
+};
+
+const resp = {
+  pilot: {
+    en: ["Pilot mode active. Your density is collapsing into action. Fix the fact, execute the step — no excess.",
+         "You are in +1. The path is concrete. One action, one result. Compress intention into output. Now.",
+         "Pilot engaged. Linear time is your tool — use it precisely. What is the single next action?",
+         "Action state confirmed. The wave has collapsed. You have a particle. Execute it."],
+    ru: ["Режим Пилота активен. Ваша плотность сжимается в действие. Зафиксируйте факт, выполните шаг.",
+         "Вы в +1. Путь конкретен. Одно действие — один результат. Сожмите интенцию в результат. Сейчас.",
+         "Пилот активирован. Линейное время — ваш инструмент. Используйте его точно.",
+         "Действие подтверждено. Волна схлопнулась. У вас есть частица. Выполните её."]
+  },
+  explorer: {
+    en: ["Explorer mode. You are in −1, pure potential. Let the hypothesis breathe. No conclusions yet.",
+         "Non-linear state detected. Your density is expanding. Hold the question — not the answer.",
+         "You are in the wave state. Multiple paths exist simultaneously. Observe all. Choose none yet.",
+         "Explorer engaged. This is the field before collapse. Stay here until the signal clarifies."],
+    ru: ["Режим Исследователя. Вы в −1, чистый потенциал. Дайте гипотезе дышать. Пока без выводов.",
+         "Нелинейное состояние. Ваша плотность расширяется. Удерживайте вопрос — не ответ.",
+         "Вы в волновом состоянии. Несколько путей существуют одновременно. Наблюдайте — не выбирайте.",
+         "Исследователь активирован. Оставайтесь здесь пока сигнал не прояснится."]
+  },
+  center: {
+    en: ["Point 0. Maximum density. You stand at the threshold between potential and action. This is the moment of choice.",
+         "Center state. ρ(x) = 1. You are neither wave nor particle. The Croupier holds the balance.",
+         "Equilibrium. The density is at peak. Your next move defines the direction of collapse.",
+         "Point Zero. Both paths are open. Pilot or Explorer — choose consciously."],
+    ru: ["Точка 0. Максимальная плотность. Вы на пороге между потенциалом и действием. Это момент выбора.",
+         "Центр. ρ(x) = 1. Вы ни волна ни частица. Крупье удерживает равновесие.",
+         "Равновесие. Плотность на пике. Следующий шаг определит направление схлопывания.",
+         "Точка Ноль. Оба пути открыты. Пилот или Исследователь — выбирайте осознанно."]
+  }
+};
+
+let density = 1.0;
+let axisPos = 0;
+
+function detectLang(t){ return /[а-яА-ЯёЁ]/.test(t)?'ru':'en'; }
+
+function selectMode(t, lang){
+  const l=t.toLowerCase(), k=kw[lang];
+  const p=k.pilot.filter(x=>l.includes(x)).length;
+  const e=k.explorer.filter(x=>l.includes(x)).length;
+  if(p===e) return 'center';
+  if(p>0&&e>0) return 'center';
+  return p>e?'pilot':'explorer';
+}
+
+function runCroupier(){
+  const input=document.getElementById('croupierInput').value.trim();
+  if(!input) return;
+  const lang=detectLang(input);
+  const mode=selectMode(input,lang);
+
+  const delta=mode==='pilot'?0.15:mode==='explorer'?-0.15:0;
+  density=Math.max(0,Math.min(1,density+delta));
+  axisPos=mode==='pilot'?1:mode==='explorer'?-1:0;
+
+  const arr=resp[mode][lang];
+  const text=arr[Math.floor(Math.random()*arr.length)];
+
+  const out=document.getElementById('croupierOut');
+  out.style.opacity=0;
+  setTimeout(()=>{ out.textContent=text; out.style.opacity=1; },200);
+
+  const badge=document.getElementById('modeBadge');
+  const labels={pilot:'PILOT · +1',explorer:'EXPLORER · −1',center:'CENTER · 0'};
+  badge.textContent=labels[mode];
+  badge.className='mode-badge mode-'+mode;
+
+  document.getElementById('densityFill').style.width=(density*100)+'%';
+  const colors={pilot:'#6ec87e',explorer:'#c86ec8',center:'#c8a96e'};
+  document.getElementById('densityFill').style.background=colors[mode];
+  document.getElementById('densityNum').textContent=density.toFixed(2);
+  document.getElementById('heroDensity').textContent=density.toFixed(2);
+
+  const pct=(axisPos+1)/2*100;
+  document.getElementById('axisDot').style.left=`calc(${pct}% - 5px)`;
+
+  document.getElementById('croupierInput').value='';
+}
+
+document.getElementById('croupierInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter') runCroupier();
+});
+</script>
 </body>
 </html>
